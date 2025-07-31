@@ -1,0 +1,16 @@
+import { Outlet, Navigate } from 'react-router-dom'
+
+import { useAuthContext } from './useAuthContext'
+
+export const ProtectRoutes = () => {
+	const { user, isReady } = useAuthContext()
+
+	if (!isReady) {
+		return <>Loading...</>
+	}
+
+	const authenticated = !!user?.email
+	const route = authenticated ? <Outlet /> : <Navigate to="/" />
+
+	return route
+}
