@@ -15,4 +15,9 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  preview: {
+    port: 8080,
+    host: '0.0.0.0',
+    allowedHosts: ['laceibavota-frontend-qziur.ondigitalocean.app', 'laceibavota.valentinvasquez.com'],
+  },
 })
