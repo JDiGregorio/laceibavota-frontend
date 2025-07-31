@@ -71,7 +71,7 @@ const VotersListView = (): React.ReactElement => {
 
     return (
         <ListView
-            title={'DIPs'}
+            title={'Votantes'}
             canCreate={true} // permissions.canCreate("dip")
             canEdit={false} // permissions.canEdit("dip")
             paginatorInfo={paginatorInfo}
