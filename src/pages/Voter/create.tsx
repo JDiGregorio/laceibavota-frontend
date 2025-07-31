@@ -16,7 +16,15 @@ const VoterCreate = (): React.ReactElement => {
     const [phone, setPhone] = useState('')
     const [center, setCenter] = useState('')
 
-    const [createVoter, result] = useCreateVoterMutation()
+    const [createVoter, result] = useCreateVoterMutation({
+		onCompleted: () => {
+			toast.success('Votante creado exitosamente!')
+
+            navigate(`/votantes`, {
+                replace: true
+            })
+		}
+	})
 
     const navigate = useNavigate()
 
@@ -58,14 +66,6 @@ const VoterCreate = (): React.ReactElement => {
                 }
             }
         })
-
-		if (result.data) {
-			toast.success('Votante creado exitosamente!')
-
-            navigate(`/votantes`, {
-                replace: true
-            })
-        }
     }
 
     return (
