@@ -1,0 +1,27 @@
+query ListVoters($first: Int!, $page: Int, $search: String) {
+  voters(first: $first, page: $page, search: $search) {
+    data {
+      id
+      name
+      dni
+      address
+      phone
+    }
+    paginatorInfo {
+      currentPage
+      lastPage
+      total
+    }
+  }
+}
+
+mutation CreateVoter($input: CreateVoterInput!) {
+  createVoter(input: $input) {
+    id
+    name
+    dni
+    address
+    phone
+    center
+  }
+}

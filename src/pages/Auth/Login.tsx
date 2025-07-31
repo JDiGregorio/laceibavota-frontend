@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
 
 import { Label } from '@/components/ui/label'
@@ -8,19 +8,26 @@ import { Button } from '@/components/ui/button'
 
 import { useLogin } from '@/hooks/useLogin'
 
+/**
+ * Login administrador > email, password, restablecer.
+ * Login coordinador > dni, code
+ * Login movilizador > dni, code
+ * Invitado > N/A
+ */
+
 const Login = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [dni, setDNI] = useState('')
+    const [code, setCode] = useState('')
 	const [remember, setRemember] = useState(false)
 
     const { authenticate, loading } = useLogin()
 
 	useEffect(() => {
         const isRemembered = !!localStorage.getItem("isRemembered")
-        const email = localStorage.getItem("email") ?? ""
+        const dni = localStorage.getItem("dni") ?? ""
 
         if (isRemembered) {
-            setEmail(email)
+            setDNI(dni)
             setRemember(true)
         }
     }, [])
@@ -34,47 +41,47 @@ const Login = () => {
     const handleLogin = () => {
 		if (remember) {
 			localStorage.setItem("isRemembered", "true")
-			localStorage.setItem("email", email)
+			localStorage.setItem("dni", dni)
 		} else {
 			localStorage.setItem("isRemembered", "false")
-			localStorage.removeItem("email")
+			localStorage.removeItem("dni")
 		}
 
-        authenticate({ email: email, password: password })
+        authenticate({ dni: dni, code: code })
     }
 
     return (
         <form className="space-y-6">
             <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="email">
-                    Correo electrónico
+                <Label htmlFor="dni">
+                    DNI
                 </Label>
 
                 <Input
-                    type="email"
-                    id="email"
-                    value={email}
-                    autoComplete="email"
-                    placeholder="Correo electrónico"
+                    type="text"
+                    id="dni"
+                    value={dni}
+                    autoComplete="off"
+                    placeholder="DNI"
                     required
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setDNI(e.target.value)}
                     onKeyDown={handlePressEnter}
                 />
             </div>
 
             <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="password">
-                    Contraseña
+                <Label htmlFor="code">
+                    Código de acceso
                 </Label>
 
                 <Input
                     type="password"
-                    id="password"
-                    value={password}
-                    autoComplete="current-password"
-                    placeholder="Contraseña"
+                    id="code"
+                    value={code}
+                    autoComplete="off"
+                    placeholder="Código de acceso"
                     required
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setCode(e.target.value)}
                     onKeyDown={handlePressEnter}
                 />
             </div>
@@ -95,11 +102,11 @@ const Login = () => {
                     </label>
                 </div>
 
-                <div className="text-sm leading-6">
+                {/*<div className="text-sm leading-6">
                     <Link to="/forgot-password" className="font-semibold text-orange-600 hover:text-orange-500">
                         ¿Olvidó su contraseña?
                     </Link>
-                </div>
+                </div>*/}
             </div>
 
             <div>
@@ -108,6 +115,7 @@ const Login = () => {
                     variant={"default"}
                     onClick={handleLogin}
                     disabled={loading}
+                    className="w-full cursor-pointer"
                 >
                     {loading && <Loader2 aria-hidden="true" className="animate-spin -ml-0.5 mr-1.5 h-5 w-5" />}
                     {loading ? "Iniciando sesión" : "Iniciar sesión"}

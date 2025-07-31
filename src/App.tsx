@@ -6,6 +6,7 @@ import { useAuthContext } from '@/hooks/useAuthContext'
 import { withLayout } from '@/pages/Auth/Layout'
 import { ProtectRoutes } from '@/hooks/useProtectRoutes'
 import Layout from '@/components/layouts/Layout'
+import Welcome from '@/pages/Welcome'
 
 const wLogin = lazy(() => import('@/pages/Auth/Login'))
 const wForgotPassword = lazy(() => import('@/pages/Auth/ForgotPassword'))
@@ -22,7 +23,9 @@ function App() {
   return (
     <Suspense fallback={<Spinner />}>
       <Routes>
-        <Route path="/" element={isAuthenticated ? <Navigate to="/inicio" replace={true} /> : <Login />} />
+        <Route path="/" element={isAuthenticated ? <Navigate to="/inicio" replace={true} /> : <Welcome />} />
+        <Route path="/login" element={isAuthenticated ? <Navigate to="/inicio" replace={true} /> : <Login />} />
+        
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/password-reset/:token" element={<ResetPassword />} />
 

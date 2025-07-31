@@ -1,19 +1,22 @@
 import { lazy } from 'react'
 import {
     HomeIcon,
+    UserGroupIcon,
     ClipboardDocumentListIcon,
-    UserGroupIcon
 } from '@heroicons/react/24/outline'
 
-import { PermissionHelpers } from "@/hooks/usePermissions" 
+import { PermissionHelpers } from "@/hooks/usePermissions"
 
 const Dashboard = lazy(() => import('@/pages/Dashboard'))
+const VotersIndex = lazy(() => import('@/pages/Voter'))
+const VoterCreate = lazy(() => import('@/pages/Voter/create'))
+// const ProgramasEdit = lazy(() => import('@/pages/Programa/edit'))
 
 const routes = (permissions: PermissionHelpers) => [
     {
         view: true,
         path: '/inicio',
-        component: Dashboard, // Dashboard
+        component: Dashboard,
         label: 'Inicio',
         sidebar: {
             icon: HomeIcon,
@@ -21,9 +24,9 @@ const routes = (permissions: PermissionHelpers) => [
         }
     },
     {
-        view: permissions.canView("votante"),
+        view: true, // permissions.canView("votante"),
         path: '/votantes',
-        component: Dashboard,
+        component: VotersIndex,
         label: 'Votantes',
         sidebar: {
             icon: UserGroupIcon,
@@ -31,7 +34,19 @@ const routes = (permissions: PermissionHelpers) => [
         }
     },
     {
-        view: permissions.canView("centro"),
+        view: true, // permissions.canCreate("programa"),
+        path: '/votantes/crear',
+        component: VoterCreate,
+        label: 'Crear'
+    },
+    {
+        view: permissions.canEdit("programa"),
+        path: '/programas/:id/editar',
+        component: Dashboard,
+        label: 'Editar'
+    },
+    {
+        view: permissions.canView("centers"),
         path: '/centros',
         component: Dashboard,
         label: 'Centros',
@@ -41,7 +56,7 @@ const routes = (permissions: PermissionHelpers) => [
         }
     },
     {
-        view: permissions.canView("dip"),
+        view: permissions.canView("users"),
         path: '/usuarios',
         component: Dashboard,
         label: 'Usuarios',

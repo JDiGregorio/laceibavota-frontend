@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Disclosure, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/24/solid'
 import { UserIcon, ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/outline'
@@ -6,7 +6,6 @@ import axios from 'axios'
 
 import { Breadcrumbs } from './Breadcrumbs'
 import { ProfileDrawer } from '@/pages/User/components/ProfileDrawer'
-import { ConfirmDialog } from '@/components/widgets/Dialog/ConfirmDialog'
 import { toast } from '@/utils/toast'
 
 import { getInitials } from '@/lib/utils'
@@ -21,33 +20,7 @@ interface NavbarProps {
 
 export const Navbar = ({ permissions }: NavbarProps): React.ReactElement => {
     const [drawerOpen, setDrawerOpen] = useState(false)
-    const [expired, setExpired] = useState(false)
-
     const { user, dispatch } = useAuthContext()
-
-    useEffect(() => {
-        if (user) {
-            setExpired(user.password_required)
-        }
-    }, [user])
-
-    const handleConfirmModal = () => {
-        handleCancelModal()
-        setDrawerOpen(true)
-    }
-
-    const handleCancelModal = () => {
-        if (user) {
-            const updateUser = { ...user, password_required: false }
-
-            localStorage.removeItem('user')
-            localStorage.setItem('user', JSON.stringify(updateUser))
-
-            dispatch({ type: 'UPDATE', payload: updateUser })
-
-            setExpired(false)
-        }
-    }
 
     const handleProfile = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
@@ -66,10 +39,10 @@ export const Navbar = ({ permissions }: NavbarProps): React.ReactElement => {
     }
 
     return (
-        <Disclosure as="nav" className="bg-white shadow">
+        <Disclosure as="nav" className="bg-white shadow border-b border-gray-200">
             {() => (
                 <>
-                    <div className="mx-auto max-w-full px-2 sm:px-4 lg:px-8" style={{ backgroundColor: '#ff6b00' }}>
+                    <div className="mx-auto max-w-full px-2 sm:px-4 lg:px-8">
                         <div className="flex h-16 justify-between">
                             <div className="flex px-2 lg:px-0">
                                 <Breadcrumbs
@@ -77,33 +50,23 @@ export const Navbar = ({ permissions }: NavbarProps): React.ReactElement => {
 								/>
                             </div>
 
-                            <ConfirmDialog
-                                title="Su contraseña ha expirado"
-                                message="Por razones de seguridad, es necesario que establezca una nueva contraseña para continuar accediendo a su cuenta."
-                                open={expired}
-                                setOpen={() => {}}
-                                onConfirm={handleConfirmModal}
-                                onDeny={handleCancelModal}
-                                cta="Actualizar contraseña"
-                            />
-
                             <ProfileDrawer open={drawerOpen} onClose={setDrawerOpen} />
 
                             <div className="flex items-center space-x-2">
                                 <Menu as="div" className="relative">
-                                    <MenuButton className=" flex items-center p-1.5">
+                                    <MenuButton className=" flex items-center p-1.5 cursor-pointer">
                                         <span className="sr-only">Open user menu</span>
 
                                         <span className="flex items-center space-x-1">
-                                            <span aria-hidden="true" className="hidden lg:block text-md text-white font-semibold">
+                                            <span aria-hidden="true" className="hidden lg:block text-md text-gray-700 font-semibold">
                                                 {user && user.name}
                                             </span>
 
-                                            <span className="lg:hidden py-1 px-2 items-center rounded-full shadow-2xl text-md text-white font-semibold">
+                                            <span className="lg:hidden py-1 px-2 items-center rounded-full shadow-2xl text-md text-gray-700 font-semibold">
                                                 {user && getInitials(user.name)}
                                             </span>
 
-                                            <ChevronDownIcon aria-hidden="true" className="size-4 text-white/50" />
+                                            <ChevronDownIcon aria-hidden="true" className="size-4 text-gray-900/50" />
                                         </span>
                                     </MenuButton>
 

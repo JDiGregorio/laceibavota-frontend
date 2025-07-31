@@ -10,12 +10,12 @@ axios.defaults.withCredentials = true
 axios.defaults.withXSRFToken = true
 
 export interface Login {
-    email: string
-    password: string
+    dni: string
+    code: string
 }
 
 export const useLogin = (): {
-    authenticate: (args: { email: string; password: string }) => Promise<void>
+    authenticate: (args: { dni: string; code: string }) => Promise<void>
     loading: boolean
 } => {
     const [loading, setLoading] = useState(false)
@@ -26,9 +26,9 @@ export const useLogin = (): {
         setLoading(true)
 
         await axios.get(`${BASE_URL}/sanctum/csrf-cookie`)
-        await axios.post(`${BASE_URL}/login`, {
-            email: credentials.email,
-            password: credentials.password
+        await axios.post(`${BASE_URL}/login/mobilizer`, {
+            dni: credentials.dni,
+            code: credentials.code
         })
         .then(async () => {
             setLoading(false)
