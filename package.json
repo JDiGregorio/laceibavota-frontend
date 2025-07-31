@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-types": "graphql-codegen --config codegen.ts"
+    "generate-types": "graphql-codegen --config codegen.ts",
+    "start": "vite preview"
   },
   "dependencies": {
     "@apollo/client": "^3.13.9",
