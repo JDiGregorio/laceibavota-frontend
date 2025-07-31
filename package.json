@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "generate-types": "graphql-codegen --config codegen.ts",
-    "start": "vite preview --port 8080"
+    "start": "vite preview --port 8080 --host 0.0.0.0"
   },
   "dependencies": {
     "@apollo/client": "^3.13.9",
