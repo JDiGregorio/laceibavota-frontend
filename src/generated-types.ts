@@ -33,7 +33,7 @@ export type CreateVoterInput = {
   center?: InputMaybe<Scalars['String']['input']>;
   dni: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  phone: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Mutation = {
@@ -98,11 +98,17 @@ export type PaginatorInfo = {
 export type Query = {
   __typename?: 'Query';
   user?: Maybe<User>;
+  voter?: Maybe<Voter>;
   voters: VoterPaginator;
 };
 
 
 export type QueryUserArgs = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+};
+
+
+export type QueryVoterArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -144,7 +150,7 @@ export type User = {
 
 export type Voter = {
   __typename?: 'Voter';
-  address: Scalars['String']['output'];
+  address?: Maybe<Scalars['String']['output']>;
   birthdate?: Maybe<Scalars['Date']['output']>;
   center?: Maybe<Scalars['String']['output']>;
   dni: Scalars['String']['output'];
@@ -169,14 +175,14 @@ export type ListVotersQueryVariables = Exact<{
 }>;
 
 
-export type ListVotersQuery = { __typename?: 'Query', voters: { __typename?: 'VoterPaginator', data: Array<{ __typename?: 'Voter', id: string, name: string, dni: string, address: string, phone?: string | null }>, paginatorInfo: { __typename?: 'PaginatorInfo', currentPage: number, lastPage: number, total: number } } };
+export type ListVotersQuery = { __typename?: 'Query', voters: { __typename?: 'VoterPaginator', data: Array<{ __typename?: 'Voter', id: string, name: string, dni: string, address?: string | null, phone?: string | null }>, paginatorInfo: { __typename?: 'PaginatorInfo', currentPage: number, lastPage: number, total: number } } };
 
 export type CreateVoterMutationVariables = Exact<{
   input: CreateVoterInput;
 }>;
 
 
-export type CreateVoterMutation = { __typename?: 'Mutation', createVoter: { __typename?: 'Voter', id: string, name: string, dni: string, birthdate?: any | null, address: string, phone?: string | null, center?: string | null } };
+export type CreateVoterMutation = { __typename?: 'Mutation', createVoter: { __typename?: 'Voter', id: string, name: string, dni: string, birthdate?: any | null, address?: string | null, phone?: string | null, center?: string | null } };
 
 
 export const ListVotersDocument = gql`

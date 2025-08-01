@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Cleave from 'cleave.js/react'
 
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -7,22 +8,14 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/utils/toast'
 
-import { ChevronDownIcon } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
 
 import { useCreateVoterMutation } from '@/generated-types'
 
 const VoterCreate = (): React.ReactElement => {
     const [name, setName] = useState('')
     const [dni, setDNI] = useState('')
-    const [open, setOpen] = React.useState(false)
-    const [birthdate, setBirthdate] = useState<Date | undefined>(undefined)
+    const [birthdate, setBirthdate] = useState<string>()
 	const [address, setAddress] = useState('')
     const [phone, setPhone] = useState('')
     const [center, setCenter] = useState('')
@@ -56,8 +49,8 @@ const VoterCreate = (): React.ReactElement => {
             return
         }
 
-        const date = new Date('Fri Aug 01 2025 00:00:00 GMT-0600');
-        const formatted = date.toISOString().split('T')[0];
+        const [dd, mm, yyyy] = birthdate.split('-');
+        const formatted = `${yyyy}-${mm}-${dd}`;
 
         createVoter({
             variables: {
@@ -112,14 +105,20 @@ const VoterCreate = (): React.ReactElement => {
                                                     Identidad
                                                 </Label>
 
-                                                <Input
-                                                    type="text"
-                                                    id="dni"
-                                                    value={dni}
-													placeholder="Identidad"
+                                                <Cleave
+                                                    className={cn(
+                                                        "file:text-slate-950 placeholder:text-slate-500 selection:bg-slate-900 selection:text-slate-50 dark:bg-slate-200/30 border-slate-200 flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:file:text-slate-50 dark:placeholder:text-slate-400 dark:selection:bg-slate-50 dark:selection:text-slate-900 dark:dark:bg-slate-800/30 dark:border-slate-800",
+                                                        "focus-visible:border-slate-950 focus-visible:ring-slate-950/50 focus-visible:ring-[3px] dark:focus-visible:border-slate-300 dark:focus-visible:ring-slate-300/50",
+                                                        "aria-invalid:ring-red-500/20 dark:aria-invalid:ring-red-500/40 aria-invalid:border-red-500 dark:aria-invalid:ring-red-900/20 dark:dark:aria-invalid:ring-red-900/40 dark:aria-invalid:border-red-900"                                                            
+                                                    )}
+                                                    placeholder="---- ---- -----"
+                                                    options={{
+                                                        numericOnly: true,
+                                                        delimiter: '-',
+                                                        blocks: [4, 4, 5],
+                                                    }}
+                                                    value={phone}
                                                     onChange={(e) => setDNI(e.target.value)}
-                                                    autoComplete="codigo"
-                                                    required
                                                 />
                                             </div>
 
@@ -128,26 +127,20 @@ const VoterCreate = (): React.ReactElement => {
                                                     Fecha de nacimiento
                                                 </Label>
 
-                                                <Popover open={open} onOpenChange={setOpen}>
-                                                    <PopoverTrigger asChild>
-                                                        <Button variant="outline" id="birthdate" className="w-full justify-between font-normal">
-                                                            {birthdate ? birthdate.toLocaleDateString() : "Seleccionar"}
-                                                            <ChevronDownIcon />
-                                                        </Button>
-                                                    </PopoverTrigger>
-
-                                                    <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                                                        <Calendar
-                                                            mode="single"
-                                                            selected={birthdate}
-                                                            captionLayout="dropdown"
-                                                            onSelect={(birthdate) => {
-                                                                setBirthdate(birthdate)
-                                                                setOpen(false)
-                                                            }}
-                                                        />
-                                                    </PopoverContent>
-                                                </Popover>
+                                                <Cleave
+                                                    className={cn(
+                                                        "file:text-slate-950 placeholder:text-slate-500 selection:bg-slate-900 selection:text-slate-50 dark:bg-slate-200/30 border-slate-200 flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:file:text-slate-50 dark:placeholder:text-slate-400 dark:selection:bg-slate-50 dark:selection:text-slate-900 dark:dark:bg-slate-800/30 dark:border-slate-800",
+                                                        "focus-visible:border-slate-950 focus-visible:ring-slate-950/50 focus-visible:ring-[3px] dark:focus-visible:border-slate-300 dark:focus-visible:ring-slate-300/50",
+                                                        "aria-invalid:ring-red-500/20 dark:aria-invalid:ring-red-500/40 aria-invalid:border-red-500 dark:aria-invalid:ring-red-900/20 dark:dark:aria-invalid:ring-red-900/40 dark:aria-invalid:border-red-900"                                                            
+                                                    )}
+                                                    placeholder="DD-MM-YYYY"
+                                                    options={{
+                                                        date: true,
+                                                        delimiter: '-',
+                                                        datePattern: ['d', 'm', 'Y']
+                                                    }}
+                                                    onChange={(e) => setBirthdate(e.target.value)}
+                                                />
                                             </div>
 
                                             <div className="sm:col-span-6 space-y-2">
@@ -155,14 +148,20 @@ const VoterCreate = (): React.ReactElement => {
                                                     Télefono
                                                 </Label>
 
-                                                <Input
-                                                    type="text"
-                                                    id="phone"
+                                                <Cleave
+                                                    className={cn(
+                                                        "file:text-slate-950 placeholder:text-slate-500 selection:bg-slate-900 selection:text-slate-50 dark:bg-slate-200/30 border-slate-200 flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:file:text-slate-50 dark:placeholder:text-slate-400 dark:selection:bg-slate-50 dark:selection:text-slate-900 dark:dark:bg-slate-800/30 dark:border-slate-800",
+                                                        "focus-visible:border-slate-950 focus-visible:ring-slate-950/50 focus-visible:ring-[3px] dark:focus-visible:border-slate-300 dark:focus-visible:ring-slate-300/50",
+                                                        "aria-invalid:ring-red-500/20 dark:aria-invalid:ring-red-500/40 aria-invalid:border-red-500 dark:aria-invalid:ring-red-900/20 dark:dark:aria-invalid:ring-red-900/40 dark:aria-invalid:border-red-900"                                                            
+                                                    )}
+                                                    placeholder="---- ----"
+                                                    options={{
+                                                        numericOnly: true,
+                                                        delimiter: '-',
+                                                        blocks: [4, 4],
+                                                    }}
                                                     value={phone}
-													placeholder="---- ----"
                                                     onChange={(e) => setPhone(e.target.value)}
-                                                    autoComplete="codigo"
-                                                    required
                                                 />
                                             </div>
 
