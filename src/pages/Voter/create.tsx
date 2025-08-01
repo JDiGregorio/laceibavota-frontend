@@ -7,11 +7,22 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/utils/toast'
 
+import { ChevronDownIcon } from "lucide-react"
+import { Calendar } from "@/components/ui/calendar"
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
 import { useCreateVoterMutation } from '@/generated-types'
 
 const VoterCreate = (): React.ReactElement => {
     const [name, setName] = useState('')
     const [dni, setDNI] = useState('')
+    const [open, setOpen] = React.useState(false)
+    const [birthdate, setBirthdate] = useState<Date | undefined>(undefined)
 	const [address, setAddress] = useState('')
     const [phone, setPhone] = useState('')
     const [center, setCenter] = useState('')
@@ -40,26 +51,20 @@ const VoterCreate = (): React.ReactElement => {
             return
         }
 
-        if (address.length === 0) {
-            toast.warning('Necesita asignar la dirección.')
+        if (!birthdate) {
+            toast.warning('Necesita seleccionar la fecha de nacimiento.')
             return
         }
 
-        if (phone.length === 0) {
-            toast.warning('Necesita asignar un télefono.')
-            return
-        }
-
-        if (center.length === 0) {
-            toast.warning('Necesita asignar un centro de votación.')
-            return
-        }
+        const date = new Date('Fri Aug 01 2025 00:00:00 GMT-0600');
+        const formatted = date.toISOString().split('T')[0];
 
         createVoter({
             variables: {
                 input: {
                     name: name,
                     dni: dni,
+                    birthdate: formatted,
                     address: address,
                     phone: phone,
                     center: center
@@ -87,7 +92,7 @@ const VoterCreate = (): React.ReactElement => {
 
                                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                             <div className="sm:col-span-6 space-y-2">
-                                                <Label htmlFor="name">
+                                                <Label htmlFor="name" data-required="*">
                                                     Nombre
                                                 </Label>
 
@@ -103,7 +108,7 @@ const VoterCreate = (): React.ReactElement => {
                                             </div>
 
                                             <div className="sm:col-span-6 space-y-2">
-                                                <Label htmlFor="dni">
+                                                <Label htmlFor="dni" data-required="*">
                                                     Identidad
                                                 </Label>
 
@@ -113,6 +118,49 @@ const VoterCreate = (): React.ReactElement => {
                                                     value={dni}
 													placeholder="Identidad"
                                                     onChange={(e) => setDNI(e.target.value)}
+                                                    autoComplete="codigo"
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className="sm:col-span-6 space-y-2">
+                                                <Label htmlFor="birthdate" data-required="*">
+                                                    Fecha de nacimiento
+                                                </Label>
+
+                                                <Popover open={open} onOpenChange={setOpen}>
+                                                    <PopoverTrigger asChild>
+                                                        <Button variant="outline" id="birthdate" className="w-full justify-between font-normal">
+                                                            {birthdate ? birthdate.toLocaleDateString() : "Seleccionar"}
+                                                            <ChevronDownIcon />
+                                                        </Button>
+                                                    </PopoverTrigger>
+
+                                                    <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                                                        <Calendar
+                                                            mode="single"
+                                                            selected={birthdate}
+                                                            captionLayout="dropdown"
+                                                            onSelect={(birthdate) => {
+                                                                setBirthdate(birthdate)
+                                                                setOpen(false)
+                                                            }}
+                                                        />
+                                                    </PopoverContent>
+                                                </Popover>
+                                            </div>
+
+                                            <div className="sm:col-span-6 space-y-2">
+                                                <Label htmlFor="phone">
+                                                    Télefono
+                                                </Label>
+
+                                                <Input
+                                                    type="text"
+                                                    id="phone"
+                                                    value={phone}
+													placeholder="---- ----"
+                                                    onChange={(e) => setPhone(e.target.value)}
                                                     autoComplete="codigo"
                                                     required
                                                 />
@@ -136,33 +184,16 @@ const VoterCreate = (): React.ReactElement => {
 												</div>
 											</div>
 
-                                            <div className="sm:col-span-6 space-y-2">
-                                                <Label htmlFor="phone">
-                                                    Télefono
-                                                </Label>
-
-                                                <Input
-                                                    type="text"
-                                                    id="phone"
-                                                    value={phone}
-													placeholder="---- ----"
-                                                    onChange={(e) => setPhone(e.target.value)}
-                                                    autoComplete="codigo"
-                                                    required
-                                                />
-                                            </div>
-
 											<div className="sm:col-span-6 space-y-2">
 												<Label htmlFor="center">
 													Centro de Votación
 												</Label>
 
 												<div className="mt-2">
-													<Textarea
+													<Input
 														name="center"
 														id="center"
 														spellCheck={false}
-														rows={6}
 														value={center}
 														placeholder="Dirección"
 														onChange={({ target }) => setCenter(target.value)}

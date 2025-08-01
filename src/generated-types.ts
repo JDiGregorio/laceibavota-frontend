@@ -28,8 +28,9 @@ export type Center = {
 };
 
 export type CreateVoterInput = {
-  address: Scalars['String']['input'];
-  center: Scalars['String']['input'];
+  address?: InputMaybe<Scalars['String']['input']>;
+  birthdate: Scalars['Date']['input'];
+  center?: InputMaybe<Scalars['String']['input']>;
   dni: Scalars['String']['input'];
   name: Scalars['String']['input'];
   phone: Scalars['String']['input'];
@@ -37,7 +38,7 @@ export type CreateVoterInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createVoter?: Maybe<Voter>;
+  createVoter: Voter;
 };
 
 
@@ -144,6 +145,7 @@ export type User = {
 export type Voter = {
   __typename?: 'Voter';
   address: Scalars['String']['output'];
+  birthdate?: Maybe<Scalars['Date']['output']>;
   center?: Maybe<Scalars['String']['output']>;
   dni: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -174,7 +176,7 @@ export type CreateVoterMutationVariables = Exact<{
 }>;
 
 
-export type CreateVoterMutation = { __typename?: 'Mutation', createVoter?: { __typename?: 'Voter', id: string, name: string, dni: string, address: string, phone?: string | null, center?: string | null } | null };
+export type CreateVoterMutation = { __typename?: 'Mutation', createVoter: { __typename?: 'Voter', id: string, name: string, dni: string, birthdate?: any | null, address: string, phone?: string | null, center?: string | null } };
 
 
 export const ListVotersDocument = gql`
@@ -236,6 +238,7 @@ export const CreateVoterDocument = gql`
     id
     name
     dni
+    birthdate
     address
     phone
     center

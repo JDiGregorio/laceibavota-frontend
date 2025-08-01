@@ -20,6 +20,7 @@ mutation CreateVoter($input: CreateVoterInput!) {
     id
     name
     dni
+    birthdate
     address
     phone
     center
