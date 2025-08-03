@@ -9,7 +9,7 @@ export const ProtectRoutes = () => {
 		return <>Loading...</>
 	}
 
-	const authenticated = !!user?.email
+	const authenticated = !!user?.id
 	const route = authenticated ? <Outlet /> : <Navigate to="/" />
 
 	return route
