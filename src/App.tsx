@@ -18,7 +18,7 @@ const ResetPassword = withLayout(wResetPassword, "Restablecer contraseña")
 
 function App() {
   const { user } = useAuthContext()
-  const isAuthenticated = !!user?.email
+  const isAuthenticated = !!user?.id
 
   return (
     <Suspense fallback={<Spinner />}>
