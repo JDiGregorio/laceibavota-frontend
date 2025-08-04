@@ -49,8 +49,8 @@ const VoterCreate = (): React.ReactElement => {
             return
         }
 
-        const [dd, mm, yyyy] = birthdate.split('-');
-        const formatted = `${yyyy}-${mm}-${dd}`;
+        const [yyyy, mm, dd] = birthdate.split('/')
+        const formatted = `${yyyy}-${mm}-${dd}`
 
         createVoter({
             variables: {
