@@ -117,7 +117,7 @@ const VoterCreate = (): React.ReactElement => {
                                                         delimiter: '-',
                                                         blocks: [4, 4, 5],
                                                     }}
-                                                    value={phone}
+                                                    value={dni}
                                                     onChange={(e) => setDNI(e.target.value)}
                                                 />
                                             </div>
@@ -133,12 +133,13 @@ const VoterCreate = (): React.ReactElement => {
                                                         "focus-visible:border-slate-950 focus-visible:ring-slate-950/50 focus-visible:ring-[3px] dark:focus-visible:border-slate-300 dark:focus-visible:ring-slate-300/50",
                                                         "aria-invalid:ring-red-500/20 dark:aria-invalid:ring-red-500/40 aria-invalid:border-red-500 dark:aria-invalid:ring-red-900/20 dark:dark:aria-invalid:ring-red-900/40 dark:aria-invalid:border-red-900"                                                            
                                                     )}
-                                                    placeholder="DD-MM-YYYY"
+                                                    placeholder="AAAA/MM/DD"
                                                     options={{
                                                         date: true,
-                                                        delimiter: '-',
-                                                        datePattern: ['d', 'm', 'Y']
+                                                        delimiter: '/',
+                                                        datePattern: ['Y', 'm', 'd']
                                                     }}
+                                                    value={birthdate}
                                                     onChange={(e) => setBirthdate(e.target.value)}
                                                 />
                                             </div>
@@ -194,7 +195,7 @@ const VoterCreate = (): React.ReactElement => {
 														id="center"
 														spellCheck={false}
 														value={center}
-														placeholder="Dirección"
+														placeholder="Centro de votación"
 														onChange={({ target }) => setCenter(target.value)}
 													/>
 												</div>
